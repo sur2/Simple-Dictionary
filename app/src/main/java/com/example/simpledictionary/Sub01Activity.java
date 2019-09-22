@@ -34,6 +34,7 @@ public class Sub01Activity extends AppCompatActivity {
         ab.setTitle(setActionBarTitle);
     }
 
+    // RecyclerView를 구현하기 위한 메서드
     private void initializeRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager =  new LinearLayoutManager(this);
@@ -48,7 +49,7 @@ public class Sub01Activity extends AppCompatActivity {
             sample.setName(i+" "+setActionBarTitle);
             sample.setPullName(i+" "+setActionBarTitle);
             sample.setContents(i+ " contents");
-            sample.setBookmark(false);
+            sample.setBookmark(true);
             recyclerAdapter.addItem(sample);
         }
         recyclerAdapter.notifyDataSetChanged();

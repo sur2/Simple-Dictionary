@@ -74,7 +74,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
             name.setText(sample.getName());
             pullName.setText(sample.getPullName());
             contents.setText(sample.getContents());
-            bookmark.setImageResource(R.drawable.ic_bookmark_off);
+            if(!sample.isBookmark()) {
+                bookmark.setImageResource(R.drawable.ic_bookmark_off);
+            }else {
+                bookmark.setImageResource(R.drawable.ic_bookmark_on);
+            }
+
         }
     }
 }
