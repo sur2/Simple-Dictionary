@@ -5,20 +5,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dictonaryDTO.Sample;
 import com.example.simpledictionary.R;
+import com.example.simpledictionary.Sub01Activity;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 // RecyclerView의 Adapter를 구현하기 위해서 RecyclerView.Adapter를 상속받는다.
 // RecyclerView는 추상클래스 즉, 해당 클래스의 추상메서드를 구현해야 한다.
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemViewHolder>{
 
-    private ArrayList<Sample> sampleList = new ArrayList<>();
+    private List<Sample> sampleList = new LinkedList<>();
 
     @NonNull
     @Override
@@ -53,7 +57,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
 
     // RecyclerView의 핵심인 ViewHolder
     // 여기서 subView를 setting 합니다.
-    class ItemViewHolder extends RecyclerView.ViewHolder {
+    // View.OnClickListener를 implements 받아 onClick 이벤트를 관리합니다.
+    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView name;
         private TextView pullName;
@@ -76,10 +81,34 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
             contents.setText(sample.getContents());
             if(!sample.isBookmark()) {
                 bookmark.setImageResource(R.drawable.ic_bookmark_off);
+                bookmark.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bookmark.setImageResource(R.drawable.ic_bookmark_on);
+                    }
+                });
             }else {
                 bookmark.setImageResource(R.drawable.ic_bookmark_on);
+                bookmark.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bookmark.setImageResource(R.drawable.ic_bookmark_off);
+                    }
+                });
             }
 
+            // OnBinc() 메서드가 호출 될 때 OnClickListener를 적용에 클릭 이벤트를 발생시킨다.
+            itemView.setOnClickListener(this);
+        }
+
+        // View.OnClickListener를 implements를 받지 않을 경우 각 요소들에 각각 onClick 이벤트를 만들어 사용할 수 도 있음
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.item:
+                    Toast.makeText(v.getContext(), name.getText(), Toast.LENGTH_SHORT).show();
+                    break;
+            }
         }
     }
 }

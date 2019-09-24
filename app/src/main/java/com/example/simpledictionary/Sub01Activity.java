@@ -15,7 +15,7 @@ import com.example.dictonaryDTO.Sample;
 
 public class Sub01Activity extends AppCompatActivity {
     private String setActionBarTitle;
-    private ActionBar ab;
+    private ActionBar actionBar;
     private RecyclerAdapter recyclerAdapter;
 
     @Override
@@ -30,8 +30,8 @@ public class Sub01Activity extends AppCompatActivity {
     private void setAcationBar() {
         Intent sub01 = getIntent();
         setActionBarTitle = sub01.getStringExtra("ActionBar Title");
-        ab = getSupportActionBar();
-        ab.setTitle(setActionBarTitle);
+        actionBar = getSupportActionBar();
+        actionBar.setTitle(setActionBarTitle);
     }
 
     // RecyclerView를 구현하기 위한 메서드
@@ -44,14 +44,34 @@ public class Sub01Activity extends AppCompatActivity {
     }
 
     private void addSample() {
-        for (int i = 0; i < 20; i++) {
-            Sample sample = new Sample();
-            sample.setName(i+" "+setActionBarTitle);
-            sample.setPullName(i+" "+setActionBarTitle);
-            sample.setContents(i+ " contents");
-            sample.setBookmark(true);
-            recyclerAdapter.addItem(sample);
+        if(setActionBarTitle.equalsIgnoreCase("SAMPLE01")) {
+            for (int i = 0; i < 20; i++) {
+                Sample sample = new Sample();
+                sample.setName(i+" "+"SAMPLE01");
+                sample.setPullName(i+" "+"SAMPLE01");
+                sample.setContents(i+ " contents");
+                sample.setBookmark(false);
+                recyclerAdapter.addItem(sample);
+            }
+        } else if(setActionBarTitle.equalsIgnoreCase("SAMPLE02")){
+            for (int i = 0; i < 30; i++) {
+                Sample sample = new Sample();
+                sample.setName(i+" "+"SAMPLE02");
+                sample.setPullName(i+" "+"Second SAMPLE");
+                sample.setContents(i+ " contents");
+                sample.setBookmark(false);
+                recyclerAdapter.addItem(sample);
+            }
+        } else {
+            for (int i = 0; i < 40; i++) {
+                Sample sample = new Sample();
+                sample.setName(i+" "+"SAMPLE03");
+                sample.setPullName(i+" "+"SAMPLE03");
+                sample.setContents(i+ " contents of Sample03");
+                sample.setBookmark(false);
+                recyclerAdapter.addItem(sample);
+            }
         }
-        recyclerAdapter.notifyDataSetChanged();
+//        recyclerAdapter.notifyDataSetChanged();
     }
 }
