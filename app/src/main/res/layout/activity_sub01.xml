@@ -7,29 +7,51 @@
     android:orientation="vertical"
     tools:context=".Sub01Activity">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10sp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10sp"
-            app:srcCompat="@drawable/ic_search">
-        </ImageView>
-
-        <EditText
-            android:id="@+id/editText"
+        <com.example.custom.element.CustomEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="단어를 검색하세요.">
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            />
 
-        </EditText>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10sp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:contentDescription="@string/search_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10sp"
+                app:srcCompat="@drawable/ic_search">
+            </ImageView>
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:hint="@string/search_hint"
+                android:importantForAutofill="no">
+            </EditText>
+        </LinearLayout>
+
+        <ImageView
+            android:contentDescription="@string/under_line"
+            android:layout_width="match_parent"
+            android:layout_height="2sp"
+            android:layout_marginRight="10sp"
+            android:layout_marginLeft="10sp"
+            android:background="@android:color/darker_gray"
+            tools:ignore="SmallSp" />
 
     </LinearLayout>
 

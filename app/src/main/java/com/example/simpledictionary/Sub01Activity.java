@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.example.adapter.RecyclerAdapter;
+import com.example.custom.element.CustomEditText;
 import com.example.dictonaryDTO.Sample;
 
 public class Sub01Activity extends AppCompatActivity {
@@ -23,6 +24,7 @@ public class Sub01Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setAcationBar();
         setContentView(R.layout.activity_sub01);
+
         initializeRecyclerView();
         addSample();
     }
