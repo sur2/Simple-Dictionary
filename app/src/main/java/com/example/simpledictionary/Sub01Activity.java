@@ -27,6 +27,8 @@ public class Sub01Activity extends AppCompatActivity {
 
         initializeRecyclerView();
         addSample();
+
+
     }
 
     private void setAcationBar() {

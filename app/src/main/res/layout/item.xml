@@ -17,9 +17,9 @@
         android:gravity="center">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:padding="10sp">
@@ -49,9 +49,10 @@
 
         <CheckBox
             android:id="@+id/bookmarkBtn"
-            android:layout_width="24sp"
-            android:layout_height="24sp"
-            android:layout_margin="8sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:padding="10sp"
             android:background="@drawable/star_check_box"
             android:button="@null">
         </CheckBox>

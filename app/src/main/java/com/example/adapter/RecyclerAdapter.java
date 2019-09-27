@@ -14,9 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dictonaryDTO.Sample;
 import com.example.simpledictionary.R;
-import com.example.simpledictionary.Sub01Activity;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
