@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,12 +16,14 @@ import com.example.simpledictionary.R;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 // RecyclerView의 Adapter를 구현하기 위해서 RecyclerView.Adapter를 상속받는다.
 // RecyclerView는 추상클래스 즉, 해당 클래스의 추상메서드를 구현해야 한다.
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemViewHolder> {
 
     private List<Sample> sampleList = new LinkedList<>();
+    private List<Sample> searchList = new LinkedList<>();
 
     @NonNull
     @Override
@@ -36,7 +37,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         // item을 하나 씩 bind하는 함수입니다.
-        holder.onBind(sampleList.get(position));
+//        holder.onBind(sampleList.get(position));
+        holder.onBind(searchList.get(position));
     }
 
     @Override
@@ -53,6 +55,34 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
     // 외부에서 item을 삭제시킬 함수
     public void delItem(int index) {
         sampleList.remove(index);
+    }
+
+    // 해당 검색어만 보여주는 필터
+    public void filter(String search) {
+        // search를 소문자로 변경(언어는 JVM에 따른 인스턴스화)
+        search = search.toLowerCase(Locale.getDefault());
+        searchList.clear();
+
+        // 검색어가 없는 경우
+        if(search.length() == 0) {
+            searchList.addAll(sampleList);
+        }
+        else {
+            for (Sample word : sampleList) {
+                String name = word.getName();
+                String contents = word.getContents();
+                String pullName = word.getPullName();
+
+                // 이름이나 내용에 검색어가 포함될 경우
+                if (name.toLowerCase(Locale.getDefault()).contains(search)
+                        || contents.toLowerCase(Locale.getDefault()).contains(search)
+                        || pullName.toLowerCase(Locale.getDefault()).contains(search)){
+
+                    searchList.add(word);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     // RecyclerView의 핵심인 ViewHolder

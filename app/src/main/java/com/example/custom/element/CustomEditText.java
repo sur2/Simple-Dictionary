@@ -6,6 +6,7 @@ import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +25,8 @@ public class CustomEditText extends RelativeLayout {
     private EditText editText;
     private Button searchBtn;
     private Button clearBtn;
+    // 키보드 상태 객체 받기
+    private InputMethodManager inputMethodManager = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
     public CustomEditText(Context context) {
         super(context);
@@ -40,7 +43,6 @@ public class CustomEditText extends RelativeLayout {
         setLayoutInflater();
     }
 
-
     // 레이아웃을 설정
     private void setLayoutInflater() {
         LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -53,7 +55,6 @@ public class CustomEditText extends RelativeLayout {
         clearBtn = findViewById(R.id.clearable_button);
         editText.setVisibility(INVISIBLE);
         clearBtn.setVisibility(INVISIBLE);
-        clearEditText();
         onSearch();
     }
 
@@ -65,43 +66,20 @@ public class CustomEditText extends RelativeLayout {
                 editText.setVisibility(RelativeLayout.VISIBLE);
                 searchBtn.setVisibility(RelativeLayout.INVISIBLE);
                 editText.requestFocus();
-                InputMethodManager inputMethodManager = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                // 키보드 올리기
                 inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                onEditText();
             }
         });
     }
 
     private void onEditText(){
-        clearEditText();
-
-    }
-
-
-
-    // 텍스트가 변할 때 이벤트를 발생
-    private void textChange() {
-        // TextWatcher를 사용해 EditText가 변할 때 마다 이벤트 호출
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            // 텍스트가 변경 될 때 마다 호출되는 메서드
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() > -1){
-                    clearBtn.setVisibility(RelativeLayout.VISIBLE);
-                }else {
-                    clearBtn.setVisibility(RelativeLayout.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+        Log.d("에디트 포커스", editText.hasFocus()+"");
+        if (editText.hasFocus()) {
+            clearBtn.setVisibility(RelativeLayout.VISIBLE);
+            clearEditText();
+        }
     }
 
     // 텍스트를 비우는 메서드
@@ -111,7 +89,12 @@ public class CustomEditText extends RelativeLayout {
             public void onClick(View view) {
                 editText.setText("");
                 editText.clearFocus();
+                editText.setVisibility(RelativeLayout.INVISIBLE);
                 searchBtn.setVisibility(RelativeLayout.VISIBLE);
+                clearBtn.setVisibility(INVISIBLE);
+
+                // 키보드 내리기
+                inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
             }
         });
     }

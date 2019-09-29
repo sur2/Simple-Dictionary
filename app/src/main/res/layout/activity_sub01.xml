@@ -11,11 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.example.custom.element.CustomEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-       <!-- <LinearLayout
+        <!-- <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10sp"
@@ -39,6 +35,11 @@
                 android:importantForAutofill="no">
             </EditText>
         </LinearLayout>-->
+
+        <com.example.custom.element.CustomEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"/>
 
         <ImageView
             android:contentDescription="@string/under_line"
