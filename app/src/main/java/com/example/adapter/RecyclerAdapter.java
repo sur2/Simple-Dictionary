@@ -1,5 +1,6 @@
 package com.example.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.dictonaryDTO.Sample;
 import com.example.simpledictionary.R;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -37,8 +39,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         // item을 하나 씩 bind하는 함수입니다.
-//        holder.onBind(sampleList.get(position));
-        holder.onBind(searchList.get(position));
+        holder.onBind(sampleList.get(position));
+//        holder.onBind(searchList.get(position));
     }
 
     @Override
@@ -82,6 +84,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
                 }
             }
         }
+        Log.d("검색된 데이터", searchList.toString());
         notifyDataSetChanged();
     }
 

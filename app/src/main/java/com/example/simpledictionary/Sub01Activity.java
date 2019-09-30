@@ -7,17 +7,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.adapter.RecyclerAdapter;
 import com.example.custom.element.CustomEditText;
 import com.example.dictonaryDTO.Sample;
 
+import java.util.Locale;
+
 public class Sub01Activity extends AppCompatActivity {
     private String setActionBarTitle;
     private ActionBar actionBar;
     private RecyclerAdapter recyclerAdapter;
+
+    private EditText searchText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,29 @@ public class Sub01Activity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerAdapter = new RecyclerAdapter();
         recyclerView.setAdapter(recyclerAdapter);
+        initElement();
+    }
+
+    private void initElement() {
+        searchText = (EditText) findViewById(R.id.search_edit);
+        searchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = searchText.getText().toString().toLowerCase(Locale.getDefault());
+                recyclerAdapter.filter(text);
+            }
+        });
+
     }
 
     private void addSample() {
