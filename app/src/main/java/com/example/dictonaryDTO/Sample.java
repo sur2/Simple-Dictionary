@@ -7,6 +7,16 @@ public class Sample {
     private String contents;
     private boolean bookmark;
 
+    public Sample() {
+        super();
+    }
+
+    public Sample(String name, String pullName, String contents) {
+        this.name = name;
+        this.pullName = pullName;
+        this.contents = contents;
+    }
+
     public String getName() {
         return name;
     }

@@ -39,14 +39,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         // item을 하나 씩 bind하는 함수입니다.
-        holder.onBind(sampleList.get(position));
-//        holder.onBind(searchList.get(position));
+//        holder.onBind(sampleList.get(position));
+        holder.onBind(searchList.get(position));
     }
 
     @Override
     public int getItemCount() {
         // RecyclerView의 총 item 수 반환
-        return sampleList.size();
+//        return sampleList.size();
+        return searchList.size();
     }
 
     // 외부에서 item을 추가시킬 함수
@@ -59,12 +60,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         sampleList.remove(index);
     }
 
+    // 외부에서 추가된 sampleList를 searchList에 채워넣는 함수
+    public void setSearchList() {
+        searchList.addAll(sampleList);
+    }
+
     // 해당 검색어만 보여주는 필터
     public void filter(String search) {
+        Log.i("fillter", "실행 중");
         // search를 소문자로 변경(언어는 JVM에 따른 인스턴스화)
         search = search.toLowerCase(Locale.getDefault());
-        searchList.clear();
 
+        searchList.clear();
         // 검색어가 없는 경우
         if(search.length() == 0) {
             searchList.addAll(sampleList);
@@ -81,6 +88,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
                         || pullName.toLowerCase(Locale.getDefault()).contains(search)){
 
                     searchList.add(word);
+                    for (Sample sample:searchList) {
+                        Log.i("검색된 단어", sample.getName());
+                    }
                 }
             }
         }
