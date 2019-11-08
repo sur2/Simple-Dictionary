@@ -1,11 +1,14 @@
 package com.example.adapter;
 
-import android.util.Log;
+import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,23 +18,32 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.dictonaryDTO.Sample;
 import com.example.simpledictionary.R;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 // RecyclerView의 Adapter를 구현하기 위해서 RecyclerView.Adapter를 상속받는다.
 // RecyclerView는 추상클래스 즉, 해당 클래스의 추상메서드를 구현해야 한다.
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemViewHolder> {
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemViewHolder> implements Filterable {
 
+    // adapter에 들어갈 리스트
     private List<Sample> sampleList = new LinkedList<>();
     private List<Sample> searchList = new LinkedList<>();
+
+    private Context context;
+
+    // Item의 클릭 상태를 저장할 array 객체
+    // ItemViewHolder로 view를 재활용 할 때 UI에 변화를 줄 경우 다른 position의 item에 변화를 줄 수 있기 때문에 SparseBooleanArray의 item의 클릭 상태 저장
+    private SparseBooleanArray selectedItems = new SparseBooleanArray();
+
+    // 직전에 클릭했던 Item의 position
+    private int prePosition = -1;
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         // LayoutInflater를 이용하여 item.xml을 inflate 한다.
+        context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
         return new ItemViewHolder(view);
     }
@@ -55,6 +67,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         sampleList.add(sample);
     }
 
+    // 외부에서 sampleList 추가
+    public void setSampleList(List list) {
+        sampleList.clear();
+        sampleList.addAll(list);
+    }
+
     // 외부에서 item을 삭제시킬 함수
     public void delItem(int index) {
         sampleList.remove(index);
@@ -65,37 +83,41 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         searchList.addAll(sampleList);
     }
 
-    // 해당 검색어만 보여주는 필터
-    public void filter(String search) {
-        Log.i("fillter", "실행 중");
-        // search를 소문자로 변경(언어는 JVM에 따른 인스턴스화)
-        search = search.toLowerCase(Locale.getDefault());
-
+    // 검색 : 내부 SQL에서 SELECT된 정보만 보여주는 함수
+    public void selectByKeyword(List<Sample> select) {
         searchList.clear();
-        // 검색어가 없는 경우
-        if(search.length() == 0) {
-            searchList.addAll(sampleList);
-        }
-        else {
-            for (Sample word : sampleList) {
-                String name = word.getName();
-                String contents = word.getContents();
-                String pullName = word.getPullName();
+        searchList.addAll(select);
+        notifyDataSetChanged();
+    }
 
-                // 이름이나 내용에 검색어가 포함될 경우
-                if (name.toLowerCase(Locale.getDefault()).contains(search)
-                        || contents.toLowerCase(Locale.getDefault()).contains(search)
-                        || pullName.toLowerCase(Locale.getDefault()).contains(search)){
-
-                    searchList.add(word);
-                    for (Sample sample:searchList) {
-                        Log.i("검색된 단어", sample.getName());
+    // 검색 : Filterable interface를 구현하여 리사이클러 뷰 내부에서 item 필터
+    @Override
+    public Filter getFilter() {
+        searchList.clear();
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String text = charSequence.toString();
+                if(text.isEmpty()) {
+                    searchList.addAll(sampleList);
+                } else {
+                    for (Sample name:sampleList) {
+                        if (name.getName().toLowerCase().contains(text.toLowerCase())){
+                            searchList.add(name);
+                        }
                     }
                 }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = searchList;
+                return filterResults;
             }
-        }
-        Log.d("검색된 데이터", searchList.toString());
-        notifyDataSetChanged();
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                searchList = (List<Sample>)filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     // RecyclerView의 핵심인 ViewHolder
