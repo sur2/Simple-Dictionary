@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -130,6 +131,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         private TextView contents;
         private CheckBox bookmark;
 
+        private LinearLayout infoLayout;
+        private int position;
+
+
         // 상속받을 시 생성자 필수(itmeView는 하나의 item)
         private ItemViewHolder(View itemView) {
             super(itemView);
@@ -138,6 +143,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
             pullName = itemView.findViewById(R.id.pullName);
             contents = itemView.findViewById(R.id.content);
             bookmark = itemView.findViewById(R.id.bookmarkBtn);
+            infoLayout = itemView.findViewById(R.id.infoLayout);
         }
 
         private void onBind(Sample sample) {
@@ -151,8 +157,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
 
             // OnBind() 메서드가 호출 될 때 OnCheckedChangeListener를 적용에 클릭 이벤트를 발생시킨다.
             bookmark.setOnCheckedChangeListener(this);
-
         }
+
+
 
         // View.OnClickListener를 implements를 받지 않을 경우 각 요소들에 각각 onClick 이벤트를 만들어 사용할 수 도 있음
         @Override
@@ -160,6 +167,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
             switch (v.getId()) {
                 case R.id.item:
                     Toast.makeText(v.getContext(), name.getText(), Toast.LENGTH_SHORT).show();
+                    infoLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                     break;
             }
         }
@@ -175,6 +183,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
                     }
                     break;
             }
+        }
+
+        /**
+         * 클릭된 Item의 상태 변경
+         * @param isExpanded Item을 펼칠 것인지 여부
+         */
+        private void changeVisibility(final boolean isExpanded) {
+            // Layout의 height
         }
     }
 }

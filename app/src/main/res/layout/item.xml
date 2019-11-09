@@ -55,7 +55,7 @@
 
             <CheckBox
                 android:id="@+id/bookmarkBtn"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/star_check_box"
@@ -68,15 +68,20 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/infoLayout"
         android:layout_width="match_parent"
         android:layout_height="1sp"
         android:layout_marginLeft="10sp"
         android:layout_marginRight="10sp"
+        android:gravity="center"
         android:background="@android:color/darker_gray">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+
+            android:layout_width="350sp"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
             android:background="@android:color/white">
 
             <TextView
@@ -84,20 +89,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
+                android:text="name Info"
+                android:padding="10sp"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/pullNameInfo"
-                android:layout_width="0sp"
-                android:layout_height="0sp"
-                android:textColor="@android:color/black"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/contentInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
+                android:text="pull name"
+                android:padding="10sp"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/contentsInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="contents"
+                android:padding="10sp"
                 android:textSize="14sp" />
 
         </LinearLayout>
