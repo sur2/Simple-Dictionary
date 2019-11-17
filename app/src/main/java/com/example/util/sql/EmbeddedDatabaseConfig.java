@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.example.dictonaryDTO.Sample;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EmbeddedDatabaseConfig extends SQLiteOpenHelper {
 
@@ -90,7 +91,7 @@ public class EmbeddedDatabaseConfig extends SQLiteOpenHelper {
         return selectList;
     }
 
-    public ArrayList<Sample> selectAllSample01() {
+    public List<Sample> selectAllSample01() {
         SQLiteDatabase sample01DB = this.getWritableDatabase();
         // SELECT Query
         Cursor cursor = sample01DB.rawQuery("SELECT * FROM SAMPLE01", null);

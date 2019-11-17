@@ -89,7 +89,6 @@ public class Sub01Activity extends AppCompatActivity {
     private void addSample() {
         if (setActionBarTitle.equalsIgnoreCase("SAMPLE01")) {
             // 생성된 DB를 불러오는 객체
-//            EmbeddedDatabaseConfig config = new EmbeddedDatabaseConfig(this.getApplicationContext(), "sample01.db", null, 1);
             recyclerAdapter.setSampleList(config.selectAllSample01());
         } else if (setActionBarTitle.equalsIgnoreCase("SAMPLE02")) {
             for (int i = 0; i < 30; i++) {

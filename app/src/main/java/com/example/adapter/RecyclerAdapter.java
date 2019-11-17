@@ -53,7 +53,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         // item을 하나 씩 bind하는 함수입니다.
 //        holder.onBind(sampleList.get(position));
-        holder.onBind(searchList.get(position));
+        holder.onBind(searchList.get(position), position);
     }
 
     @Override
@@ -99,11 +99,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String text = charSequence.toString();
-                if(text.isEmpty()) {
+                if (text.isEmpty()) {
                     searchList.addAll(sampleList);
                 } else {
-                    for (Sample name:sampleList) {
-                        if (name.getName().toLowerCase().contains(text.toLowerCase())){
+                    for (Sample name : sampleList) {
+                        if (name.getName().toLowerCase().contains(text.toLowerCase())) {
                             searchList.add(name);
                         }
                     }
@@ -115,7 +115,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                searchList = (List<Sample>)filterResults.values;
+                searchList = (List<Sample>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
@@ -131,9 +131,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         private TextView contents;
         private CheckBox bookmark;
 
+        private TextView nameInfo;
+        private TextView pullNameInfo;
+        private TextView contentsInfo;
+
         private LinearLayout infoLayout;
         private int position;
-
 
         // 상속받을 시 생성자 필수(itmeView는 하나의 item)
         private ItemViewHolder(View itemView) {
@@ -144,9 +147,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
             contents = itemView.findViewById(R.id.content);
             bookmark = itemView.findViewById(R.id.bookmarkBtn);
             infoLayout = itemView.findViewById(R.id.infoLayout);
+
+            nameInfo = itemView.findViewById(R.id.nameInfo);
+            pullNameInfo = itemView.findViewById(R.id.pullNameInfo);
+            contentsInfo = itemView.findViewById(R.id.contentsInfo);
         }
 
-        private void onBind(Sample sample) {
+        private void onBind(Sample sample, int position) {
+            this.position = position;
+
             name.setText(sample.getName());
             pullName.setText(sample.getPullName());
             contents.setText(sample.getContents());
@@ -157,9 +166,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
 
             // OnBind() 메서드가 호출 될 때 OnCheckedChangeListener를 적용에 클릭 이벤트를 발생시킨다.
             bookmark.setOnCheckedChangeListener(this);
+
+            // infoLayout을 클릭 시 이벤트를 받기 위한 OnClickListener
+            infoLayout.setOnClickListener(this);
         }
-
-
 
         // View.OnClickListener를 implements를 받지 않을 경우 각 요소들에 각각 onClick 이벤트를 만들어 사용할 수 도 있음
         @Override
@@ -167,7 +177,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
             switch (v.getId()) {
                 case R.id.item:
                     Toast.makeText(v.getContext(), name.getText(), Toast.LENGTH_SHORT).show();
-                    infoLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+//                    infoLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    break;
+
+                case R.id.infoLayout:
+                    if (selectedItems.get(position)) {
+                        // 펼쳐진 Item 클릭 시
+                        selectedItems.delete(position);
+                    } else {
+                        // 직전의 클릭됐던 Item의 클릭상태를 지움
+                        selectedItems.delete(prePosition);
+                        // 클릭한 Item의 position을 저장
+                        selectedItems.put(position, true);
+                    }
+                    // 해당 포지션의 변화를 알림
+                    if (prePosition != -1) {
+                        notifyItemChanged(prePosition);
+                    }
+                    // 클릭된 position 저장
+                    prePosition = position;
                     break;
             }
         }
@@ -176,10 +204,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
             switch (compoundButton.getId()) {
                 case R.id.bookmarkBtn:
-                    if (isChecked){
-                        Toast.makeText(compoundButton.getContext(), ""+isChecked, Toast.LENGTH_SHORT).show();
+                    if (isChecked) {
+                        Toast.makeText(compoundButton.getContext(), "" + isChecked, Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(compoundButton.getContext(), ""+isChecked, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(compoundButton.getContext(), "" + isChecked, Toast.LENGTH_SHORT).show();
                     }
                     break;
             }
@@ -187,6 +215,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
 
         /**
          * 클릭된 Item의 상태 변경
+         *
          * @param isExpanded Item을 펼칠 것인지 여부
          */
         private void changeVisibility(final boolean isExpanded) {
